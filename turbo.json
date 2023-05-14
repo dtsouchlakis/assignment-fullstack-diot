@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turborepo.org/schema.json",
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**", ".next/**"],
+      "env": ["backend_url"]
+    },
+    "lint": {
+      "outputs": []
+    },
+    "dev": {
+      "cache": false
+    },
+    "start": {
+      "parallel": [
+        "turbo run start --workspace web",
+        "turbo run start --workspace api"
+      ],
+      "env": ["backend_url"]
+    }
+  }
+}

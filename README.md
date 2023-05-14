@@ -18,7 +18,7 @@ This assignment involves the development of a web application called Climatix, w
 - On the first page of the dashboard, if the user does not have any activity inputs or they have rather increased their activities, they get a preset message encouraging them to log their activities. Otherwise, they get their dashboard statistics
 - The starting data for the db is semi-random, but it can happen that they are actually increasing emissions. In that case the front page wouldn't show reductions
 
-Challenges and things learned
+## Challenges and things learned
 
 - Using Material UI and Tailwind together caused several issues with styles overriding each other and looking different between running in development and after building. Furthermore, Material UI is quite heavy on imports, which can potentially be an issue.
 - Using TypeScript mixed with JSX proved to be challenging when building the project, so for the frontend, I mostly changed the files to JSX.

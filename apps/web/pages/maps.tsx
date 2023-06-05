@@ -47,7 +47,7 @@ export default function Maps(): JSX.Element {
       );
       setTopEmissionsData(sortedEmissions.slice(0, 5));
     }
-  }, [topEmissionsData]);
+  }, [emission]);
 
   const topEmissions = topEmissionsData.map((item, index) => (
     <li key={index}>

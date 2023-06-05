@@ -1,35 +1,60 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { Grid } from "@mui/material";
 import Paper from "@mui/material/Paper";
-import { useState } from "react";
-import { Emission } from "../models/emission";
-const Map = dynamic(() => import("../components/Map"), {
+import { Emission } from "../models/Emission";
+
+const Map = dynamic(() => import("../components/EmissionMap"), {
   ssr: false,
 });
+
 const emission: Emission[] = [
   {
     region: "Seoul",
     emission: 250,
-    latitude: 37.5326,
-    longitude: 127.024612,
   },
   {
     region: "Busan",
     emission: 304,
-    latitude: 35.166668,
-    longitude: 129.066666,
   },
   {
     region: "Gwangju",
     emission: 163,
-    latitude: 35.166668,
-    longitude: 126.916664,
   },
 ];
 
+async function fetchCoordinates(cityName: string) {
+  const response = await fetch(
+    `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
+  );
+  const data = await response.json();
+
+  if (data && data.length > 0) {
+    return {
+      latitude: parseFloat(data[0].lat),
+      longitude: parseFloat(data[0].lon),
+    };
+  } else {
+    throw new Error(`Could not fetch coordinates for city: ${cityName}`);
+  }
+}
+
 export default function Maps(): JSX.Element {
   const [topEmissionsData, setTopEmissionsData] = useState<Emission[]>([]);
+  const [loading, setLoading] = useState(true); // Add a loading state
+
+  useEffect(() => {
+    const fetchAllCoordinates = async () => {
+      for (const item of emission) {
+        const coords = await fetchCoordinates(item.region);
+        item.latitude = coords.latitude;
+        item.longitude = coords.longitude;
+      }
+      setTopEmissionsData(emission);
+      setLoading(false); // Set loading to false once the coordinates have been fetched
+    };
+    fetchAllCoordinates();
+  }, []);
 
   useEffect(() => {
     if (emission && emission.length > 0) {
@@ -38,12 +63,19 @@ export default function Maps(): JSX.Element {
       );
       setTopEmissionsData(sortedEmissions.slice(0, 5));
     }
-  }, [emission]);
+  }, [topEmissionsData]);
+
   const topEmissions = topEmissionsData.map((item, index) => (
     <li key={index}>
       {item.region}: {item.emission} tCO2eq
     </li>
   ));
+
+  if (loading) {
+    // Don't render the Map while loading
+    return <div>Loading...</div>;
+  }
+
   return (
     <Grid container spacing={2} className="h-full">
       <Grid item xs={12} sm={12} md={12} className="h-full">

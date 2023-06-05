@@ -2,7 +2,7 @@ import L from "leaflet";
 import React from "react";
 import "leaflet/dist/leaflet.css";
 import { useEffect, useState, useRef } from "react";
-import { Emission } from "../models/emission";
+import { Emission } from "../models/Emission";
 function EmissionMap({ emission }: { emission: Emission[] }): JSX.Element {
   const [isMounted, setIsMounted] = useState(false);
 

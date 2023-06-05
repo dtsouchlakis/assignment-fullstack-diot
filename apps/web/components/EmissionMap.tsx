@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from "react";
 import { Emission } from "../models/Emission";
 function EmissionMap({ emission }: { emission: Emission[] }): JSX.Element {
   const [isMounted, setIsMounted] = useState(false);
+  const id = "map" + Math.random(); // Generate a unique id for the map
 
   useEffect(() => {
     setIsMounted(true);
@@ -24,7 +25,7 @@ function EmissionMap({ emission }: { emission: Emission[] }): JSX.Element {
       }).addTo(map);
       L.control.attribution({ prefix: false }).addTo(map);
       emission.forEach((item) => {
-        const circle = L.circle([item.latitude, item.longitude], {
+        const circle = L.circle([item.latitude!, item.longitude!], {
           color: "red",
           fillColor: "#f03",
           fillOpacity: 0.5,
@@ -38,7 +39,7 @@ function EmissionMap({ emission }: { emission: Emission[] }): JSX.Element {
     }
   }, [isMounted]);
 
-  return <div id="map" className="w-full h-full rounded-t-md"></div>;
+  return <div id={id} className="w-full h-full rounded-t-md"></div>;
 }
 
 export default EmissionMap;

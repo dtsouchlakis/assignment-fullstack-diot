@@ -40,4 +40,4 @@ The estimated time spent on this assignment is approximately 48 hours.
 
 ## Additional run method
 
-The build monorepo can be run in parallel by running npm start -parallel
+The built monorepo can be run in parallel by running npm start -parallel

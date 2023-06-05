@@ -3,7 +3,7 @@ import dynamic from "next/dynamic";
 import { Grid } from "@mui/material";
 import Paper from "@mui/material/Paper";
 import { Emission } from "../models/Emission";
-
+import { fetchCoordinates } from "../services/service";
 const Map = dynamic(() => import("../components/EmissionMap"), {
   ssr: false,
 });
@@ -22,22 +22,6 @@ const emission: Emission[] = [
     emission: 163,
   },
 ];
-
-async function fetchCoordinates(cityName: string) {
-  const response = await fetch(
-    `https://nominatim.openstreetmap.org/search?city=${cityName}&format=json`
-  );
-  const data = await response.json();
-
-  if (data && data.length > 0) {
-    return {
-      latitude: parseFloat(data[0].lat),
-      longitude: parseFloat(data[0].lon),
-    };
-  } else {
-    throw new Error(`Could not fetch coordinates for city: ${cityName}`);
-  }
-}
 
 export default function Maps(): JSX.Element {
   const [topEmissionsData, setTopEmissionsData] = useState<Emission[]>([]);

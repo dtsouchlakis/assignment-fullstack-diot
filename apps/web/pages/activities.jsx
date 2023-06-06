@@ -60,12 +60,17 @@ export default function Activities() {
   }
 
   useEffect(() => {
-    try {
-      checkServer();
-    } catch (err) {
+    const fetchData = async () => {
+      try {
+        await checkServer();
+      } catch (err) {
+        setError("Unable to connect to server");
+      }
+    };
+    fetchData().catch((err) => {
       setError("Unable to connect to server");
-    }
-  });
+    });
+  }, []);
 
   return (
     <>

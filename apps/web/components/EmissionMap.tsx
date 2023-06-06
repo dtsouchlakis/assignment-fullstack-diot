@@ -6,13 +6,12 @@ import { Emission } from "../models/Emission";
 function EmissionMap({ emission }: { emission: Emission[] }): JSX.Element {
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   let mapInstance: LeafletMap | null = null;
-  let circleInstances: Circle[] = [];
 
   useEffect(() => {
     mapInstance = L.map(mapContainerRef.current!, {
       attributionControl: false,
     }).setView([36.5, 127.5], 7);
-
+    //With leaflet we can relatively easily change tileLayer providers (see: https://leafletjs.com/reference-1.6.0.html#tilelayer)
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
       attribution:
@@ -28,8 +27,6 @@ function EmissionMap({ emission }: { emission: Emission[] }): JSX.Element {
         radius: item.emission * 100,
       }).addTo(mapInstance!);
 
-      circleInstances.push(circle); // Save a reference to the circle instance so it can be cleaned up later
-
       circle.bindPopup(
         `<h1>${item.region}</h1><p>Emission: ${item.emission}</p>`
       );
@@ -37,7 +34,6 @@ function EmissionMap({ emission }: { emission: Emission[] }): JSX.Element {
 
     // Cleanup function
     return () => {
-      circleInstances.forEach((circle) => circle.remove()); // Remove each circle from the map
       if (mapInstance) {
         mapInstance.remove();
       }
